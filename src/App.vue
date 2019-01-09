@@ -23,7 +23,7 @@
 
     export default {
         components: {
-            NewItemForm, 
+            NewItemForm,
             TodoItem
         },
         data() {
