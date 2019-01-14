@@ -6,18 +6,16 @@
     </button>
 
     <button class="col-10 btn btn-info disabled">
-
-      <div @click="$emit('choose', todo.id)" v-if="(todo.id !== chooseId)">
+      <div class="todo_name" @click="$emit('choose', todo.id)" v-if="(todo.id !== chooseId)">
         {{ todo.name }}
       </div>
       <form class="row" v-if="(todo.id === chooseId)" @submit.prevent="ChangeName">
         <input class="col-7" v-model="newName"/>
         <input class="col-2 btn btn-success" type="submit" value="ok"/>
-        <input class="col-3 btn btn-warning" type="button" @click="$emit('canceled'); newName = todo.name" value="cancel"/>
+        <input class="col-3 btn btn-warning" type="button" @click="$emit('canceled'); newName = todo.name"
+               value="cancel"/>
       </form>
-
     </button>
-
 
     <button class="col-1 btn btn-danger btn-block" @click="$emit('del')">x</button>
 
@@ -42,7 +40,6 @@
 
 <style scoped>
   div {
-    padding: 0;
     margin: 0;
     width: 100%;
   }
@@ -50,20 +47,13 @@
   form {
     margin: 0;
   }
-  button {
-    margin: 0;
-  }
 
   .btn {
     padding: 0;
   }
 
-
-  button {
-    padding: 0;
-  }
-
-  .todo-style {
-    display: inline;
+  .todo_name {
+    text-align: left;
+    padding-left: 10px;
   }
 </style>
