@@ -1,10 +1,11 @@
 <template>
-  <div>
-    <form class="row" @submit.prevent="NewTodo">
-      <input type="text" v-model="newTodoName" class="col-10" placeholder="Введите новую задачу">
-      <button type="submit" class="btn btn-success col-2">OK</button>
-    </form>
-  </div>
+  <form class="input-group mt-2" @submit.prevent="NewTodo">
+    <input type="text" class="form-control" placeholder="Введите новое задание" v-model="newTodoName"
+           @click="$emit('click')"/>
+    <div class="input-group-append">
+      <button class="btn btn-outline-secondary border" type="submit" @click="$emit('click')">ОК</button>
+    </div>
+  </form>
 </template>
 
 <script>
@@ -22,9 +23,3 @@
     }
   }
 </script>
-
-<style scoped>
-  form {
-    margin: 0;
-  }
-</style>
