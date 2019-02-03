@@ -3,10 +3,10 @@
     <nav>
       <div class="nav nav-tabs nav-fill mt-2" id="nav-tab">
         <a class="nav-item nav-link active" id="nav-todo-tab" data-toggle="tab" href="#nav-todo" @click="Canceled">
-          СДЕЛАТЬ
+          <router-link to="/todo">СДЕЛАТЬ</router-link>
         </a>
         <a class="nav-item nav-link" id="nav-done-tab" data-toggle="tab" href="#nav-done" @click="Canceled">
-          ВЫПОЛНЕНО
+          <router-link to="/done">ВЫПОЛНЕНО</router-link>
         </a>
       </div>
     </nav>
@@ -33,6 +33,7 @@
         </div>
       </div>
     </div>
+    {{ $route.params.type }}
   </div>
 </template>
 
