@@ -1,43 +1,53 @@
 <template>
   <div class="container">
-    <nav>
-      <div class="nav nav-tabs nav-fill mt-2" id="nav-tab">
-        <router-link class="nav-item nav-link" :class="{ active: $route.params.condition!=='done' }" id="nav-todo-tab"
-                     data-toggle="tab" href="#nav-todo" @click="Canceled" to="/todo">
-          СДЕЛАТЬ
-        </router-link>
+    <div v-if="($route.params.pathMatch === '/todo' || $route.params.pathMatch === '/done')">
+      <nav>
+        <div class="nav nav-tabs nav-fill mt-2" id="nav-tab">
+          <router-link class="nav-item nav-link" :class="{ active: $route.params.pathMatch!=='/done' }"
+                       id="nav-todo-tab"
+                       data-toggle="tab" href="#nav-todo" @click="Canceled" to="/todo">
+            СДЕЛАТЬ
+          </router-link>
 
-        <router-link class="nav-item nav-link" :class="{ active: $route.params.condition==='done' }" id="nav-done-tab"
-                     data-toggle="tab" href="#nav-done" @click="Canceled" to="/done">
-          ВЫПОЛНЕНО
-        </router-link>
-      </div>
-    </nav>
-
-    <div class="tab-content" id="nav-tabContent">
-
-      <div class="tab-pane" :class="{ show: $route.params.condition!=='done', active: $route.params.condition!=='done' }"
-           id="nav-todo">
-        <new-item-form @click="Canceled" @submit="NewTodo"/>
-        <div v-for="(todo, index) in todoList" :key="todo.id">
-          <todo-item v-if="!todo.maked" :todo="todo" :chooseId="chooseId" :index="index"
-                     @del="todoList.splice(index,1)"
-                     @choose="ChooseItem" @change="ChangeName" @canceled="Canceled" @check="chooseId = -1"/>
+          <router-link class="nav-item nav-link" :class="{ active: $route.params.pathMatch==='done' }" id="nav-done-tab"
+                       data-toggle="tab" href="#nav-done" @click="Canceled" to="/done">
+            ВЫПОЛНЕНО
+          </router-link>
         </div>
-      </div>
+      </nav>
 
-      <div class="tab-pane" :class="{ show: $route.params.condition==='done', active: $route.params.condition==='done' }"
-           id="nav-done">
-        <input type="button" class="btn btn-outline-secondary btn-block mt-2" value="Удалить все"
-               @click="DelAllDone"/>
-        <div class="scroll-area">
-          <div v-for="(todo, index) in todoList" :key="todo.id+'a'">
-            <todo-item v-if="todo.maked" :todo="todo" :chooseId="chooseId" :index="index" class="todo_item"
+      <div class="tab-content" id="nav-tabContent">
+
+        <div class="tab-pane"
+             :class="{ show: $route.params.pathMatch!=='/done', active: $route.params.pathMatch!=='/done' }"
+             id="nav-todo">
+          <new-item-form @click="Canceled" @submit="NewTodo"/>
+          <div v-for="(todo, index) in todoList" :key="todo.id">
+            <todo-item v-if="!todo.maked" :todo="todo" :chooseId="chooseId" :index="index"
                        @del="todoList.splice(index,1)"
                        @choose="ChooseItem" @change="ChangeName" @canceled="Canceled" @check="chooseId = -1"/>
           </div>
         </div>
+
+        <div class="tab-pane"
+             :class="{ show: $route.params.pathMatch==='/done', active: $route.params.pathMatch==='/done' }"
+             id="nav-done">
+          <input type="button" class="btn btn-outline-secondary btn-block mt-2" value="Удалить все"
+                 @click="DelAllDone"/>
+          <div class="scroll-area">
+            <div v-for="(todo, index) in todoList" :key="todo.id+'a'">
+              <todo-item v-if="todo.maked" :todo="todo" :chooseId="chooseId" :index="index" class="todo_item"
+                         @del="todoList.splice(index,1)"
+                         @choose="ChooseItem" @change="ChangeName" @canceled="Canceled" @check="chooseId = -1"/>
+            </div>
+          </div>
+        </div>
       </div>
+    </div>
+    <div class="text-xl-center  h-100"
+         v-if="!($route.params.pathMatch === '/todo' || $route.params.pathMatch === '/done')">
+      <br />404 Страница не найдена<br /><br />
+      <router-link to="/todo"> Нажмите для перехода на главную страницу</router-link>
     </div>
   </div>
 </template>
@@ -60,17 +70,32 @@
         chooseId: -1
       }
     },
+    created() {
+      if (this.$route.params.pathMatch === '/') {
+        this.$router.push('/todo');
+      }
+    },
+    watch: {
+      '$route'() {
+        if (this.$route.params.pathMatch === '/') {
+          this.$router.push('/todo');
+        }
+      }
+    },
     methods: {
       ChooseItem(id) {
         this.chooseId = id
-      },
+      }
+      ,
       ChangeName(newName) {
         this.todoList[newName[1]].name = newName[0];
         this.chooseId = -1
-      },
+      }
+      ,
       Canceled() {
         this.chooseId = -1
-      },
+      }
+      ,
       DelAllDone() {
         if (this.someDone && window.confirm("Удалить все выполненные?")) {
           for (let i = 0; i < this.todoList.length; i++) {
@@ -81,7 +106,8 @@
             }
           }
         }
-      },
+      }
+      ,
       NewTodo(newTodoName) {
         if (newTodoName) {
           this.todoList.push({
@@ -91,7 +117,8 @@
           })
         }
       }
-    },
+    }
+    ,
     computed: {
       someDone() {
         let someDone = 0;
