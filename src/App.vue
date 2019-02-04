@@ -2,17 +2,22 @@
   <div class="container">
     <nav>
       <div class="nav nav-tabs nav-fill mt-2" id="nav-tab">
-        <a class="nav-item nav-link active" id="nav-todo-tab" data-toggle="tab" href="#nav-todo" @click="Canceled">
-          <router-link to="/todo">СДЕЛАТЬ</router-link>
-        </a>
-        <a class="nav-item nav-link" id="nav-done-tab" data-toggle="tab" href="#nav-done" @click="Canceled">
-          <router-link to="/done">ВЫПОЛНЕНО</router-link>
-        </a>
+        <router-link class="nav-item nav-link" :class="{ active: $route.params.condition!=='done' }" id="nav-todo-tab"
+                     data-toggle="tab" href="#nav-todo" @click="Canceled" to="/todo">
+          СДЕЛАТЬ
+        </router-link>
+
+        <router-link class="nav-item nav-link" :class="{ active: $route.params.condition==='done' }" id="nav-done-tab"
+                     data-toggle="tab" href="#nav-done" @click="Canceled" to="/done">
+          ВЫПОЛНЕНО
+        </router-link>
       </div>
     </nav>
 
     <div class="tab-content" id="nav-tabContent">
-      <div class="tab-pane fade show active" id="nav-todo">
+
+      <div class="tab-pane" :class="{ show: $route.params.condition!=='done', active: $route.params.condition!=='done' }"
+           id="nav-todo">
         <new-item-form @click="Canceled" @submit="NewTodo"/>
         <div v-for="(todo, index) in todoList" :key="todo.id">
           <todo-item v-if="!todo.maked" :todo="todo" :chooseId="chooseId" :index="index"
@@ -21,7 +26,8 @@
         </div>
       </div>
 
-      <div class="tab-pane fade" id="nav-done">
+      <div class="tab-pane" :class="{ show: $route.params.condition==='done', active: $route.params.condition==='done' }"
+           id="nav-done">
         <input type="button" class="btn btn-outline-secondary btn-block mt-2" value="Удалить все"
                @click="DelAllDone"/>
         <div class="scroll-area">
@@ -33,7 +39,6 @@
         </div>
       </div>
     </div>
-    {{ $route.params.type }}
   </div>
 </template>
 

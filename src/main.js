@@ -9,9 +9,9 @@ const router = new VueRouter({
   mode: 'history',
   //base: process.env.BASE_URL,
   routes: [
-    { path:'/:type', component: App }
+    { path:'/:condition', component: App }
   ]
-})
+});
 
 new Vue({
   router,
